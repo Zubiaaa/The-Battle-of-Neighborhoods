@@ -5,21 +5,6 @@
 
 In this section I will clearly define the idea of my choosing, where I leverage the Foursquare location data to solve the imagined business opportunity. 
 
-## Background
-
-There are 100's, maybe even 1000's, of travel sites on the Internet, including [FourSquare](www.foursquare.com), that will tell you all about places to go, things to see, restaurants to eat at, bars to drink in, nightclubs to part the night away in and then where to go in the morning to get breakfast and a strong coffee. The problems with these sites is that they are one dimensional. If you want to find out all this information about a city you plan to visit next month, **you** have to do the hard work. Also, just because a venue is the hottest place to go for a night out does not always mean that the unwitting tourist should just ramble in unprepared. The areas surrounding this new venue might be riddled with crime including muggings, car theft and assault, for example. Approach the venue from any direction other than from the north and you could be putting your life in danger. This is when my idea comes in.
-
-Imagine the following scenario:
-
-1. You like to plan ahead and always review your options and make your choices about where you will visit and eat up front before you travel. 
-2. You are flying to Chicogo for a Data Science Conference.
-3. You arrive in Chicago the day the conference starts but you've managed to convince your boss to delay your return by a few days giving you time to explore.
-4. But you know no one in Chicago to show you around to all the top sites and to bring you to the best restaurants.
-5. Also the last time you went to a conference you were mugged and had you passport. money and credit cards stolen so you're now nervous of going somewhere without first researching the venue and the surrounding area.
-6. The conference is next week and you don't have time to do all the research you'd like.
-
-**What do you do ... ?**
-
 ## Project Idea
 
 My idea for the Capstone Project is to show that when driven by venue and location data from FourSquare, backed up with open source crime data, that it is possible to present the cautious and nervous traveller with a list of attractions to visit supplementd with a graphics showing the occurance of crime in the region of the venue.
@@ -30,11 +15,8 @@ A high level approach is as follows:
 2. The ForeSquare website is scrapped for the top venues in the city
 3. From this list of top venues the list is augmented with additional grographical data
 4. Using this additional geographical data the top nearby restaurents are selects
-5. The historical crime within a predetermined distance of all venues are obtained
-6. A map is presented to the to the traveller showing the selected venues and crime statistics of the area. 
-7. The future probability of a crime happening near or around the selected top sites is also presented to the user
 
-#### Who is this solution targeted at
+## Target Audience
 
 This solution is targeted at the cautious traveller. The want to see all the main sites of a city that they have never visited before but at the same time, for whatever reaons unknown, they want to be able to do all that they can to make sure that they stay clear of trouble i.e. is it safe to visit this venue and this restaurant at 4:00 pm in the afternoon.
 
@@ -65,41 +47,11 @@ As noted below in the Further Development Section, it is possible to attempt qui
 
 1. Query the FourSqaure website for the top sites in Chicago
 2. Use the FourSquare API to get supplemental geographical data about the top sites
-3. Use the FourSquare API to get top restaurent recommendations closest to each of the top site 
-4. Use open source Chicago Crime data to provide the user with additional crime data
+3. Use the FourSquare API to get top restaurent recommendations closest to each of the top site
 
 ## Top Sites from FourSquare Website
 
-Although FourSquare provides a comprehensive API, one of the things that API does not easily support is a mechanism to directly extract the top N sites / venues in a given city. This data, however, is easily available directly from the FourSquare Website. To do this simply go to www.foursquare.com, enter the city of your choise and select Top Picks from _I'm Looking For_ selection field.
-
-Using BeautifulSoup and Requests the results of the Top Pick for Chicago was retrieved. A sample venue is shown below:
-
-```html
-<div class="venueDetails">
-    <div class="venueName">
-        <h2>
-    <a href="/v/millennium-park/42b75880f964a52090251fe3" target="_blank">Millennium Park
-    </a>
-</h2>
-    </div>
-    <div class="venueMeta">
-        <div class="venueScore positive" style="background-color: #00B551;" title="9.7/10 - People like this place">9.7</div>
-        <div class="venueAddressData">
-            <div class="venueAddress">201 E Randolph St (btwn Columbus Dr &amp; Michigan Ave), Chicago</div>
-            <div class="venueData"><span class="venueDataItem"><span class="categoryName">Park</span><span class="delim"> • </span></span>
-            </div>
-        </div>
-    </div>
-</div>
-```
-
-From this HTML the following data can be extracted:
-
-* Venue Name
-* Venue Score
-* Venue Category 
-* Venue HREF
-* Venue ID [Extracted from the HREF]
+This data, however, is easily available directly from the FourSquare Website. To do this simply go to www.foursquare.com, enter the city of your choic and select Top Picks from _I'm Looking For_ selection field.
 
 A sample of the extracted data is given below:
 
@@ -110,59 +62,6 @@ A sample of the extracted data is given below:
 | 49e9ef74f964a52011661fe3 | 9.6   | Art Museum    | The Art Institute of Chicago | /v/the-art-institute-of-chicago/49e9ef74f964a5... |
 | 4f2a0d0ae4b0837d0c4c2bc3 | 9.6   | Deli / Bodega | Publican Quality Meats       | /v/publican-quality-meats/4f2a0d0ae4b0837d0c4c... |
 | 4aa05f40f964a520643f20e3 | 9.6   | Theater       | The Chicago Theatre          | /v/the-chicago-theatre/4aa05f40f964a520643f20e3   |
-
-We will have a closer look at this data gather later on when the supplemental geographical data has been added.
-
-## Supplemental Geographical Data
-
-Using the `id` field extracted from the HTML it is then possible to get further supplemental geographical details about each of the top sites from FourSquare using the following sample API call:
-
-```python
-# Get the properly formatted address and the latitude and longitude
-url = 'https://api.foursquare.com/v2/venues/{}?client_id={}&client_secret={}&v={}'.format(
-    venue_id, 
-    cfg['client_id'],
-    cfg['client_secret'],
-    cfg['version'])
-    
-result = requests.get(url).json()
-result['response']['venue']['location']
-```
-The requests returns a JSON object which can then be queried for the details required. The last line in the sample code above returns the following sample JSON:
-
-```json
-{  
-   "city":"Chicago",
-   "lng":-87.62323915831546,
-   "crossStreet":"btwn Columbus Dr & Michigan Ave",
-   "neighborhood":"The Loop",
-   "postalCode":"60601",
-   "cc":"US",
-   "formattedAddress":[  
-      "201 E Randolph St (btwn Columbus Dr & Michigan Ave)",
-      "Chicago, IL 60601",
-      "United States"
-   ],
-   "state":"IL",
-   "address":"201 E Randolph St",
-   "lat":41.8826616030636,
-   "country":"United States"
-}
-```
-
-From this the following attributes are extracted:
-
-* Venue Address
-
-* Venue Postalcode
-
-* Venue City
-
-* Venue Latitude
-
-* Venue Longitude
-
-   
 
 ## Final FourSquare Top Sites Data
 
@@ -216,103 +115,6 @@ We are now ready to get the top restaurents within 500 meters of each of the top
 ## FourSquare Restaurent Recommendation Data
 
 Using the the list of all `id` values in the Top Sites DataFrame and the FourSquare `categoryID` that represents all food venues we now search for restaurants within a 500 meter radius.
-
-```python
-# Configure additional Search parameters
-categoryId = '4d4b7105d754a06374d81259'
-radius = 500
-limit = 15
-
-url = 'https://api.foursquare.com/v2/venues/search?client_id={}&client_secret={}&ll={},{}&v={}&categoryId={}&radius={}&limit={}'.format(
-    cfg['client_id'],
-    cfg['client_secret'],
-    ven_lat,
-    ven_long,
-    cfg['version'],
-    categoryId,
-    radius,
-    limit)
-
-results = requests.get(url).json()
-```
-The requests returns a JSON object which can then be queried for the restaurant details required. A sample restaurnt from the results returned is shown below:
-
-```json
-{  
-    "referralId":"v-1538424503",
-    "hasPerk":"False",
-    "venuePage":{  
-        "id":"135548807"
-    },
-    "id":"55669b9b498ee34e5249ea61",
-    "location":{  
-        "labeledLatLngs":[  
-            {  
-                "label":"display",
-                "lng":-87.62460021795313,
-                "lat":41.88169538551873
-            }
-        ],
-        "crossStreet":"btwn E Madison & E Monroe St",
-        "postalCode":"60603",
-        "formattedAddress":[  
-            "12 S Michigan Ave (btwn E Madison & E Monroe St)",
-            "Chicago, IL 60603",
-            "United States"
-        ],
-        "distance":155,
-        "city":"Chicago",
-        "lng":-87.62460021795313,
-        "neighborhood":"The Loop",
-        "cc":"US",
-        "state":"IL",
-        "address":"12 S Michigan Ave",
-        "lat":41.88169538551873,
-        "country":"United States"
-    },
-    "name":"Cindy's",
-    "categories":[  
-        {  
-            "pluralName":"Gastropubs",
-            "id":"4bf58dd8d48988d155941735",
-            "name":"Gastropub",
-            "primary":"True",
-            "icon":{  
-                "prefix":"https://ss3.4sqi.net/img/categories_v2/food/gastropub_",
-                "suffix":".png"
-            },
-            "shortName":"Gastropub"
-        }
-    ]
-},
-```
-From this JSON the following attributes are extraced and added to the Dataframe:
-
-- Restaurant ID
-- Restaurant Category Name
-- Restaurant Category ID
-- Restaurant Nest_name
-- Restaurant Address
-- Restaurant Postalcode
-- Restaurant City
-- Restaurant Latitude
-- Restaurant Longitude
-- Venue Name
-- Venue Latitude
-- Venue Longitude
-
-The only piece of data that is missing is the Score or Rating of the Restaurant. To get this we need to make another FourSquare API query using the id of the Restaurant:
-
-```python
-# Get the restaurant score and href
-rest_url = 'https://api.foursquare.com/v2/venues/{}?client_id={}&client_secret={}&v={}'.format(
-    rest_id, 
-    cfg['client_id'],
-    cfg['client_secret'],
-    cfg['version'])
-
-result = requests.get(rest_url).json()
-rest_score = result['response']['venue']['rating']
 ```
 Using just the data in this DataFrame we will be able to generate maps displaying the chosen Top List Venue and the best scored surrounding restaurants. A sample of this data is shown below:
 
@@ -399,124 +201,3 @@ Korean Restaurants                  9.0000
 Latin American Restaurants          9.0000
 Fish & Chips Shops                  9.0000
 ```
-
-
-
-## Chicago Crime Data
-
-This dataset can be download from the [Chicago Data Portal](https://data.cityofchicago.org/) and reflects reported incidents of crime (with the exception of murders where data exists for each victim) that occurred in the City of Chicago in the last year, minus the most recent seven days. A full desription of the data is available on the site.
-
-Data is extracted from the Chicago Police Department's CLEAR (Citizen Law Enforcement Analysis and Reporting) system. In order to protect the privacy of crime victims, addresses are shown at the block level only and specific locations are not identified.
-
-| Column Name           | Type        | Description                                                  |
-| :-------------------- | :---------- | :----------------------------------------------------------- |
-| CASE#                 | Plain Text  | The Chicago Police Department RD Number (Records Division Number), which is unique to the incident. |
-| DATE OF OCCURRENCE    | Date & Time | Date when the incident occurred. this is sometimes a best estimate. |
-| BLOCK                 | Plain Text  | The partially redacted address where the incident occurred, placing it on the same block as the actual address. |
-| IUCR                  | Plain Text  | The Illinois Unifrom Crime Reporting code. This is directly linked to the Primary Type and Description. See the list of IUCR codes at https://data.cityofchicago.org/d/c7ck-438e. |
-| PRIMARY DESCRIPTION   | Plain Text  | The primary description of the IUCR code.                    |
-| SECONDARY DESCRIPTION | Plain Text  | The secondary description of the IUCR code, a subcategory of the primary description. |
-| LOCATION DESCRIPTION  | Plain Text  | Description of the location where the incident occurred.     |
-| ARREST                | Plain Text  | Indicates whether an arrest was made.                        |
-| DOMESTIC              | Plain Text  | Indicates whether the incident was domestic-related as defined by the Illinois Domestic Violence Act. |
-| BEAT                  | Plain Text  | Indicates the beat where the incident occurred. A beat is the smallest police geographic area – each beat has a dedicated police beat car. Three to five beats make up a police sector, and three sectors make up a police district. The Chicago Police Department has 22 police districts. See the beats at https://data.cityofchicago.org/d/aerh-rz74. |
-| WARD                  | Number      | The ward (City Council district) where the incident occurred. See the wards at https://data.cityofchicago.org/d/sp34-6z76. |
-| FBI CD                | Plain Text  | Indicates the crime classification as outlined in the FBI's National Incident-Based Reporting System (NIBRS). See the Chicago Police Department listing of these classifications at http://gis.chicagopolice.org/clearmap_crime_sums/crime_types.html. |
-| X COORDINATE          | Plain Text  | The x coordinate of the location where the incident occurred in State Plane Illinois East NAD 1983 projection. This location is shifted from the actual location for partial redaction but falls on the same block. |
-| Y COORDINATE          | Plain Text  | The y coordinate of the location where the incident occurred in State Plane Illinois East NAD 1983 projection. This location is shifted from the actual location for partial redaction but falls on the same block. |
-| LATITUDE              | Number      | The latitude of the location where the incident occurred. This location is shifted from the actual location for partial redaction but falls on the same block. |
-| LONGITUDE             | Number      | The longitude of the location where the incident occurred. This location is shifted from the actual location for partial redaction but falls on the same block. |
-| LOCATION              | Location    | The location where the incident occurred in a format that allows for creation of maps and other geographic operations on this data portal. This location is shifted from the actual location for partial redaction but falls on the same block. |
-
-Not all of the attributes are required so on the following data was imported:
-
-* Date of Occurance
-* Block
-* Primary Description
-* Ward
-* Latitude
-* Longitude
-
-A sample of the imported data is shown.
-
-| CASE#    | DATE  OF OCCURRENCE    | BLOCK                | PRIMARY DESCRIPTION | WARD | LATITUDE  | LONGITUDE  |
-| -------- | ---------------------- | -------------------- | ------------------- | ---- | --------- | ---------- |
-| JB241987 | 04/28/2018 10:05:00 PM | 009XX N LONG AVE     | NARCOTICS           | 37.0 | 41.897895 | -87.760744 |
-| JB241350 | 04/28/2018 08:00:00 AM | 008XX E 53RD ST      | CRIMINAL DAMAGE     | 5.0  | 41.798635 | -87.604823 |
-| JB245397 | 04/28/2018 09:00:00 AM | 062XX S MICHIGAN AVE | THEFT               | 20.0 | 41.780946 | -87.621995 |
-| JB241444 | 04/28/2018 12:15:00 PM | 046XX N ELSTON AVE   | THEFT               | 39.0 | 41.965404 | -87.736202 |
-| JB241667 | 04/28/2018 04:28:00 PM | 022XX S KENNETH AVE  | ARSON               | 22.0 | 41.850673 | -87.735597 |
-
-This data was then processed as follows:
-
-1. Move September 2017 dates to September 2018
-   The extract of data used was taken mid September which meant that there was half a months data for September 2017 and half a months data for september 2018. These were combined to create a single month.
-2. Clean up the column names:
-   1. Strip leading & trailing whitespace
-   2. Replace multiple spaces with a single space
-   3. Remove # characters
-   4. Replace spaces with _
-   5. Convert to lowercase
-3. Change the date of occurance field to a date / time object
-4. Add new columns for:
-   1. Hour
-   2. Day
-   3. Month
-   4. Year
-   5. etc.
-5. Split Block into zip_code and street
-6. Verify that all rows have valid data
-
-#### Data Analysis and Visualisation
-
-Now let's look at some of the attributes and statistics of the crime dataset.
-
-We will start by looking at the top three crimes and a total count for each crime type:
-
-```python
-# What Crimes are the 3 most commonly occuring ones 
-df[['primary_description', 'case']].groupby(
-    ['primary_description'], as_index=False).count().sort_values(
-    'case', ascending=False).head(3)
-```
-
-| primary_description | case  |
-| ------------------- | ----- |
-| THEFT               | 63629 |
-| BATTERY             | 49498 |
-| CRIMINAL DAMAGE     | 27980 |
-
-To get a better understanding of the data we will now visualise it. The number of crimes per month, day and hour were calculated:
-
-![image-20181001162714277](./cases_month.jpg)
-
- ![image-20181001162714277](./cases_day.jpg)
-
-![image-20181001162714277](./cases_hour.jpg)
-
-Looking at the top three crimes it is clearly visible that the occurances of theft rise gretly during daylight hours and particularly between the hours of 3:00 pm and 5:00 pm.
-
-![image-20181001162714277](./cases_hour_area.png)
-
-
-Unsuprisingly there little obvious variation in the number of crimes committed per month other than an apparent drop-off in February. There is a small increase in crime reported at the weekend, Saturday and
-Sunday, but nothing that couldbe considered significant. There is an expected fall-off in reported crime rates after midnight and before eight in the morning.
-
-Finally the crimes data for a single month, August, was super-imposed over a map of Chicago to visualise the distribution of that data:
-
-![image-20181001162714277](./markers.jpg)
-
-The higher frequency of the top two crimes can be easily seen. Red for Theft and Blue for Battery.
-
-Next the crimes were clustered:
-
-![image-20181001162714277](./clusters.jpg)
-
-Several obvious clusters of crime locations were visible, particularly in the center of Chicago.
-
-Finally a heat map of the August crimes was created:
-
-![image-20181001162714277](./heatmap.jpg)
-
-This reinforces the cluster chart where it can clearly be seen that the center of Chicago and the area around Oak Park have a high crime rate occurrence. It will be interesting to see later if there is a high probability of crime in these areas if one of the top listed venues are located in these areas.
-
