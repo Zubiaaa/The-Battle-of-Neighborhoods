@@ -1,9 +1,5 @@
-Comparative Analysis of Venues in Makati and Cebu City in 
-the Philippines 
-Nilo Villanueva 
-Sep 20, 2020 
- 
- 
+Comparative Analysis of Venues in Makati and Cebu City in the Philippines 
+
 I. Introduction: Business Problem 
  
 Problem Statement
@@ -16,6 +12,7 @@ This Capstone project aims to study the landscape of venues available in the two
 Makati City and Metropolitan Cebu. Both locations have business establishments, industrial sites, 
 and a destination for local and foreign talent. It will be interesting to see what common venues 
 comprise each locale, particularly Metro Cebu.
+
 Background
 In the Philippines, Makati City is known as the financial capital wherein a large number of local and 
 multinational businesses are established. Situated in the country's National Capital Region (NCR), 
@@ -32,11 +29,13 @@ Summit, respectively[1]. Having a strategic location in the center of the Philip
 seen growth in various industries, such as trade, manufacturing, Business Process Outsourcing 
 (BPO), and real estate. The other surrounding islands provides an assortment of leisure spots, 
 picturesque beaches and dive sites outside the business-centric metro.
+
 Target Audience
 The study is applicable to investors and traders who plan to visit the country for business. Having an 
 idea of the popular establishments accessible to the local population of Makati and Metro Cebu. 
 Another perspective is that, would Cebu City be an alternative to Makati, for individuals who plan to 
 bring business over or just simply to visit as tourists and experience what each location has to offer.
+
 II. Data 
 1. Online/Wikipedia Scraping
 • Makati and Metro Cebu Postal Codes, Area, and Location Names. Philippine-based 
@@ -59,6 +58,7 @@ material on different set of data.
 • Charts to describe statistics of Makati and Metro Cebu 
 • Folium library to visualize location data 
 • Data wrangling, filtering dataframes and cleaning the data. 
+
 III. Methodology 
 1. Generate the starting raw data for the areas in the Philippines and their corresponding Zip or 
 Postal codes.
@@ -104,9 +104,9 @@ locations.
 previous steps. 
 • Kcluster coordinates are then overlayed on the respective maps. 
 13. Examine and analyze each cluster for Makati and Metro Cebu and observed similarities and 
-differences. 
+differences.
+
 IV. Results 
- 
 Makati City
 1. Overall, the west region of Makati shows the highest density of venue clusters. Notedly, 
 majority is comprised of cluster 2 coffee shop establishments and various forms of 
@@ -119,23 +119,13 @@ and convenience store venues.
 4. Cluster 3, made up of La Paz, Singkamas, and Tejeros areas is where the market place is 
 located, north-west of the hotel areas. The placement provides convenience and 
 accessibility to both restaurant and hotel venues. 
-Folium Map of Makati Venue Clusters
  
- 
- 
+
  
  
  
 A higher concentration of clusters (majority cluster 2) are more prominent on the west side of 
 Makati.
- 
- 
- 
- 
- 
- 
- 
- 
  
 Metropolitan Cebu
 1. Metro Cebu venue clusters are isolated to each other, as compared to Makati City, however 
@@ -148,11 +138,7 @@ area for outdoor nature and animal sight-seeing enthusiasts.
 5. Cordova in cluster 1 has an assortment of recreational venues for enjoyment. A basketball 
 stadium being the top, followed by beach and resorts. 
 6. Cluster 2 (Danao) and cluster 4 (Minglanilla) are comprised of restaurants and BBQ venues. 
-7. Cluster 5 (Consolacion) and cluster 6 (Talisay) have parks and beaches. 
-Folium Map of Metro Cebu Venue Clusters
- 
- 
- 
+7. Cluster 5 (Consolacion) and cluster 6 (Talisay) have parks and beaches.
  
 V. Discussion 
 Based on the venue classification types observed, Makati City has long been well known for the 
